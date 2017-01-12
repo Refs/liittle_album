@@ -8,7 +8,12 @@ app.set("view engine", "ejs");
 //接下来就是路由中间件；
 app.use("/static",express.static("./public"))
 
-// 第一步：将public文件夹共享出来，即public中的文件要能够直接被静态呈递，类似于apache的web容器；
+// 第一步：将public文件夹共享出来，即public中的文件中的内容要能够直接被静态呈递，类似于apache的web容器；
+// app.use(express.static("./public"))为app.use("/",express.static("./public"))的缩写；app.use的路由是靠前缀进行匹配的，即只要请求路径的前缀，满足"/"则后面的中间件"express.static()"就会执行； 由于默认的路径为/，中间件挂载没有指定路径，那么对于每个请求，这个中间件都会被执行。
+
+/* 只要访问请求的路径前缀，与app.use挂载的路径相同，就会触发中间件。若能在托管目录中访问到静态文件，则直接将静态文件放回*/
+
+// -----------分割线---------------
 
 // 第二个中间件就是访问主页时，要干嘛 在controller文件夹中新建一个文件router.js，该文件向外暴露一个函数（中间件）;
 /*
