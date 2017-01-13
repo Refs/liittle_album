@@ -32,7 +32,8 @@ app.get("/admin",router.showAdmin)
 // 如果不想被静态文件占据，可以给静态文件中间件，添加一个私有前缀：app.use("/static",express.static("./public")) 即只有req.baseUrl =static时，才会去呈递pulic文件夹；app.use(express.static("public"))是app.use("/",express.static("./public"))的省略写法；注意app.use与app.get的区别，前者是重要路由前缀匹配到就会执行回调，而后者是只有路由严格相等才会执行回调；即"127.0.0.1:3000/admin"会匹配app.get("/admin",callback),会匹配app.use("/",callback),但不会匹配app.get("/",callback);
 
 // express中有一点区别于原生就是路径"/"之前是不加点的app.get("/admin",callback)是正确的；而app.get("./admin",callback)则是错误的；
-
+app.get("/:albumName",router.showAlbum)
+//app.get接收到匹配的路由访问时，就会执行相应的动作，执行完毕之后调用回调函数，调用时会将res与req传参给回掉函数；相应的回调函数在执行过程中，可以调用req.params.albumName这样的变量；
 
 app.listen(3000);
 
