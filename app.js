@@ -37,6 +37,5 @@ app.get("/:albumName",router.showAlbum)
 
 app.listen(3000);
 
-//可以成功返回“我是主页”，
 
 
