@@ -12,9 +12,13 @@
 
 * 安装必要的node模块，以及tds文件；
 
+* vscode中安装ejs语言支持插件；安装后可以使用emmet编辑ejs模板；
+
+* 
+
+
+
 * modules文件夹，是用来执行具体业务的，即最脏最累的活，要由modules文件夹去完成；
-
 * app.js实际上就是一个中控中心，设置了一堆的东西app.set()，具体的路由交给函数去处理app.get("/",router.showIndex)，函数被写在了controller文件夹的包里；app.js是顶层，controller为控制层，modules为最底层的业务实现层；
-
 * 谁在负责路由?app.js负责路由，controller中的router.js不负责路由，其只是函数的罗列，但是其罗列的就死**路由函数** 所以就起名为**路由函数**；
 
