@@ -4,7 +4,7 @@ var app = express();
 
 app.set("view engine", "ejs");
 
-app.use(express.s tatic("./public"))
+app.use(express.static("./public"))
 
 app.get("/",router.showIndex)
 

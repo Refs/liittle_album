@@ -1,6 +1,6 @@
 # 小小相册Node.js实战
 
-## 初始化工作环境
+## 初始化工作环境 tag:v1.0
 
 * 新建一个文件夹，并在文件夹中创建3个子文件夹，分别命名为modules controller views即MVC; 说白了mvc就是将东西放在一个文件夹里，以减少他们之间的耦合；彼此之间互相调用；
 
@@ -14,11 +14,12 @@
 
 * vscode中安装ejs语言支持插件；安装后可以使用emmet编辑ejs模板；
 
-* 
 
+## 创建静态首页面 v2.0
 
 
 * modules文件夹，是用来执行具体业务的，即最脏最累的活，要由modules文件夹去完成；
 * app.js实际上就是一个中控中心，设置了一堆的东西app.set()，具体的路由交给函数去处理app.get("/",router.showIndex)，函数被写在了controller文件夹的包里；app.js是顶层，controller为控制层，modules为最底层的业务实现层；
 * 谁在负责路由?app.js负责路由，controller中的router.js不负责路由，其只是函数的罗列，但是其罗列的就死**路由函数** 所以就起名为**路由函数**；
 
+## getAllBum函数的封装 v3.0
