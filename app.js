@@ -11,6 +11,9 @@ app.get("/",router.showIndex)
 
 app.get("/:albumName",router.showAlbum)
 
+app.get("/uploads",router.showUploads)
+
+
 app.use(function(req,res){
     res.render("err"); 
 })

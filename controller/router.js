@@ -87,3 +87,16 @@ exports.showAlbum = function(req,res,next){
         })
     })
 }
+
+// 显示上传
+exports.showUploads = function(req,res,next){
+    file.getAlbumsArray(function(err,albumsArray){
+        if(err){
+            next();
+            return;
+        }
+        res.render("uploads",{
+            albums:albumsArray
+        })
+    })
+}

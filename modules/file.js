@@ -9,7 +9,7 @@ exports.getAllAlbums = function(callback){
        var albums = []; //函数要返回的文件夹；
        (function iterator(i){
            if(i == files.length){
-               console.log(albums);
+              
                callback(null,albums);
             //    console.log(albums);//将最终迭代结果，打印出来，看一下；
                return ;
@@ -51,4 +51,31 @@ exports.getAllImagesByAlbumName = function(album,callback){
             
         })(0);
     })
+}
+
+exports.getAlbumsArray = function(callback){
+   fs.readdir("./uploads",function(err,files){
+       if(err){
+           callback(err,null);
+           return;
+       }
+       var albumsArray = [];
+       (function iterator(i){
+           if(i == files.length){
+               callback(null,albumsArray);
+               return;
+           }
+           fs.stat("./uploads/"+files[i],function(err,stats){
+               if(err){
+                   callback(err,null);
+                   return;
+               }
+               if(stats.isDirectory()){
+                   albumsArray.push(files[i]);
+               }
+               iterator(i+1);
+           })
+       })(0);
+
+   })
 }
