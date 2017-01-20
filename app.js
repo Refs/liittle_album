@@ -13,6 +13,7 @@ app.get("/:albumName",router.showAlbum)
 
 app.get("/uploads",router.showUploads)
 
+app.post("/uploads",router.doPost)
 
 app.use(function(req,res){
     res.render("err"); 
