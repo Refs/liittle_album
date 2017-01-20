@@ -1,5 +1,10 @@
 
 var file = require("./../modules/file");
+var formidable = require("formidable");
+var util = require("util");
+var fs = require("fs");
+var sd = require("silly-datetime");
+var path = require("path");
 // 首页面
 exports.showIndex = function(req,res){
         file.getAllAlbums(function(err,albums){
@@ -98,5 +103,84 @@ exports.showUploads = function(req,res,next){
         res.render("uploads",{
             albums:albumsArray
         })
+    })
+}
+
+// 接收表单post数据
+exports.doPost = function(req,res,next){
+ 
+    var form = new formidable.IncomingForm();
+    // 利用这一步，其实表单中的数据，就已经接收完毕了；
+
+    form.uploadDir = "./tempup";
+    // 文件的上传路径配置，有个坑，需要填； 若我们在服务器上直接配置上传路径 form.uploadDir = "./uoloads/文件夹名字"的时候， 就会有一个问题----即用户的表单还没有提交上来（用户还没有选择上传的文件夹），我们不能提前将相册文件夹，帮用户选好（若在服务器上配置的是小强文件夹，而用户选择的是小兰文件夹，就没有办法放了）；  解决办法是：先将用户上传的文件，放到一个”中转文件夹中“，然后根据用户选择的相册名字，将其挪到正确的文件夹中；如先将文件的临时上传路径，设在根目录的tempup文件夹中；
+
+    // 配置还之后，先调试一下，看能否上传到，指定临时路径；看到上传过来的没有后缀的文件之后，下一步就是集中精力，利用文件操作，将其转移到用户指定的文件夹之中；
+
+
+    form.parse(req,function(err,fields,files){
+
+        if(err){
+            next();
+            return;
+        }
+        /*图片上传尺寸的控制------------
+        首先是获取上传文件的尺寸：
+        var fileSize = parseInt(files.picture.size);
+        接着根据文件尺寸做条件流：
+        if(fileSize > 1024){
+            //将文件删除；删除文件用fs.unlink();删除文件夹用fs.rmdir();
+            
+
+            fs.unlink(files.picture.path);
+            res.send("图片应小于1M")
+            return;
+        }else{
+            //执行下面转译文件操作；
+        }
+        
+        ----------------------------*/ 
+        var size = files.picture.size;
+        if(size > 1024){
+            fs.unlink(files.picture.path);
+            res.send("图片应小于1M")
+            return;
+        }else{
+        // console.log(fields);
+        // console.log(files);
+
+        // 文件当中有size属性（files.tupian.size），限制用户上传的图片的大小就是通过size属性来实现的，在开发过程中，有两种实现方式，第一种是先将文件传输到服务器上面，服务器检测文件大小，若文件大于限制，则直接将文件删除，并向用户反馈说文件太大； 第二是浏览器检测，说“你上传的图片太大了，但浏览器检测，需要提供足够的API，chrome有，IE没有；” 
+
+        /*---------文件移动-------
+        文件移动，主要是利用fs.rename()方法，需要传入两个参数oldpath与newpath
+        oldpath可以通过files对象获取，利用files.tupian.path就可以获取；
+
+        newpath主要有两大部分组成分别是路径目录与文件名：
+            1.目录是由"./uploads/" + 用户指定的相册目录名--fiels.album(控件的name属性)两部分组成；
+            
+            2.文件名由时间戳、5位随机数、文件拓展名三部分组成；
+                时间戳可以利用silly-datetime获取；
+                var tt = sd.format(new Date(),"YYMMDDHHmmss");
+                var ran = parseInt(Math.random()*89999 + 10000);
+                var extname = path.extname(files.tupian.name);
+
+        -------------**/ 
+            var oldpath = files.picture.path;
+
+            var tt = sd.format(new Date(),"YYYYMMDDHHmmss");
+            var ran = parseInt(Math.random()*89999 + 10000);
+            var extname = path.extname(files.picture.name);
+            
+            var newpath = "./uploads/" + fields.album +"/"+ tt + ran + extname;
+            console.log(newpath);
+            fs.rename(oldpath,newpath,function(err){
+                if(err){
+                    res.send("改名失败");
+                    return;
+                }
+            })
+        }
+
+        return;
     })
 }
